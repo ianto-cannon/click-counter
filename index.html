@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Click Counter</title>
+  <link rel="icon" href="flower.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>All-time click count</h1>
+  <p id="count">&nbsp;</p>
+  <div id="art" role="img" aria-label="Maurer rose generated from the click count"></div>
+  <details id="about">
+    <summary>About this pattern</summary>
+    <p>
+      The pattern is a <a href="https://en.wikipedia.org/wiki/Maurer_rose" target="_blank" rel="noopener">Maurer rose</a>
+      <code>r = sin(n&theta;)</code> with <code>n = <span id="v-n"></span></code>.
+      We draw straight lines between points on the rose curve at angles
+      <code>&theta; = kn</code> radians, for <code>k = 1, 2, 3, ... 512</code>.
+    </p>
+    <p>
+      Here each point turns by <code>n mod 2&pi;</code>, which is
+      <code><span id="v-a"></span></code> of a full turn, while the radius phase
+      advances by <code>n&sup2; mod 2&pi;</code>, which is
+      <code><span id="v-b"></span></code> of a turn.
+      Since &pi; is irrational, these values never repeat for different integers
+      <code>n</code>, so the same pattern is never drawn twice.
+    </p>
+    <p>
+      Change the number in the address bar to see the rose for any other count.
+    </p>
+  </details>
+  <script src="script.js"></script>
+</body>
+</html>
