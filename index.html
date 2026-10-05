@@ -3,14 +3,20 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="A click counter where every click draws a new Maurer rose. Edit the number after the # in the address bar to see the rose for any count.">
+  <meta property="og:title" content="Click Counter">
+  <meta property="og:description" content="Every click draws a new Maurer rose.">
   <title>Click Counter</title>
   <link rel="icon" href="flower.svg" type="image/svg+xml">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>All-time click count</h1>
-  <p id="count">&nbsp;</p>
-  <div id="art" role="img" aria-label="Maurer rose generated from the click count"></div>
+  <main>
+    <h1>All-time click count</h1>
+    <p id="count" aria-live="polite">&nbsp;</p>
+    <button id="click" type="button">Click</button>
+    <div id="art" role="img" aria-label="Maurer rose generated from the click count"></div>
+  </main>
   <details id="about">
     <summary>About this pattern</summary>
     <p>
@@ -30,7 +36,10 @@
     <p>
       Change the number in the address bar to see the rose for any other count.
     </p>
+    <p>
+      Source: <a href="https://github.com/ianto-cannon/click-counter">github.com/ianto-cannon/click-counter</a>
+    </p>
   </details>
-  <script src="script.js"></script>
+  <script src="script.js" defer></script>
 </body>
 </html>

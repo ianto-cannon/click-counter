@@ -44,6 +44,7 @@ let liveCount = null; // the real counter value, once we know it
 
 // draw n; setHash keeps the address bar in sync without adding history entries
 function render(n, setHash) {
+  countEl.textContent = n;
   artEl.innerHTML = maurerRose(n);
   if (setHash) history.replaceState(null, "", "#" + n);
 }
@@ -54,21 +55,32 @@ async function update(method) {
     if (!res.ok) return;
     const c = parseN((await res.text()).trim());
     if (c === null) return;
+    if (liveCount !== null && c < liveCount) return; // stale response
     liveCount = c;
-    countEl.textContent = c;
 
-    // on load, respect a number already in the URL; a click always jumps to the live count
-    if (method === "POST") render(c, true);
-    else if (hashN() === null) render(c, true);
-    else render(hashN(), false);
+    if (method === "POST") {
+      render(c, true);
+    } else {
+      // on a refresh always show the live count; on a fresh visit, respect a number in the URL
+      const nav = performance.getEntriesByType("navigation")[0];
+      const reloaded = nav && nav.type === "reload";
+      const n = hashN();
+      if (n === null || reloaded) render(c, true);
+      else render(n, false);
+    }
   } catch (err) {
     console.error("Failed to update counter:", err);
   }
 }
 
-// Clicks inside the about section don't count
-document.addEventListener("click", (e) => {
-  if (!e.target.closest("#about")) update("POST");
+const btn = document.getElementById("click");
+let busy = false;
+
+btn.addEventListener("click", async () => {
+  if (busy) return;   // ignore presses while a request is in flight
+  busy = true;
+  await update("POST");
+  busy = false;
 });
 
 // user edits the number in the address bar
