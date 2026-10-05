@@ -23,12 +23,15 @@
   border-left-color: var(--logoSpatula);
   border-bottom-color: var(--logoText);
   border-right-color: var(--logoText);
+} button:disabled {
+  cursor: default;
+  opacity: 0.6;
 } summary {
   cursor: pointer;
-} #count {
+} p.count {
   font-size: 4rem;
   margin: 0;
-} #art svg { 
+} .art svg { 
   max-width: 400px; 
   width: 100%; 
   aspect-ratio: 1;

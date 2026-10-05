@@ -1,17 +1,14 @@
-const countEl = document.getElementById("count");
-const artEl = document.getElementById("art");
-const show = (id, text) => {
-  const el = document.getElementById(id);
-  if (el) el.textContent = text;
+const artEl = document.querySelector(".art");
+const show = (cls, text) => {
+  document.querySelectorAll(`.${cls}`).forEach(el => el.textContent = text);
 };
 
 const TAU = 2 * Math.PI;
 
-// "1234" -> 1234; anything else (empty, negative, text, too big) -> null
 function parseN(s) {
   if (!/^\d+$/.test(s)) return null;
   const n = Number(s);
-  return n > 0 ? n : null;
+  return Number.isSafeInteger(n) && n > 0 ? n : null;
 }
 const hashN = () => parseN(location.hash.slice(1));
 
@@ -19,12 +16,12 @@ function maurerRose(n) {
   const SIZE = 400;
   const H = SIZE / 2;
   const R = SIZE * 0.46;
-  const a = n % TAU;        // angle step, radians
-  const b = (n * n) % TAU;  // radius phase step
+  const a = n % TAU;
+  const b = (n * n) % TAU;
 
-  show("v-n", n);
-  show("v-a", (a / TAU).toFixed(4));
-  show("v-b", (b / TAU).toFixed(4));
+  show("count", n);
+  show("angle", (a / TAU).toFixed(4));
+  show("phase", (b / TAU).toFixed(4));
 
   let pathD = "";
   for (let k = 1; k <= 512; k++) {
@@ -40,11 +37,9 @@ function maurerRose(n) {
   </svg>`;
 }
 
-let liveCount = null; // the real counter value, once we know it
+let liveCount = null;
 
-// draw n; setHash keeps the address bar in sync without adding history entries
 function render(n, setHash) {
-  countEl.textContent = n;
   artEl.innerHTML = maurerRose(n);
   if (setHash) history.replaceState(null, "", "#" + n);
 }
@@ -52,16 +47,21 @@ function render(n, setHash) {
 async function update(method) {
   try {
     const res = await fetch("/click.php", { method });
-    if (!res.ok) return;
+    if (!res.ok) {
+      if (res.status === 429) {
+        btn.textContent = "Slow down";
+        setTimeout(() => { btn.textContent = "Click"; }, 1500);
+      }
+      return;
+    }
     const c = parseN((await res.text()).trim());
     if (c === null) return;
-    if (liveCount !== null && c < liveCount) return; // stale response
+    if (liveCount !== null && c < liveCount) return;
     liveCount = c;
 
     if (method === "POST") {
       render(c, true);
     } else {
-      // on a refresh always show the live count; on a fresh visit, respect a number in the URL
       const nav = performance.getEntriesByType("navigation")[0];
       const reloaded = nav && nav.type === "reload";
       const n = hashN();
@@ -73,21 +73,26 @@ async function update(method) {
   }
 }
 
-const btn = document.getElementById("click");
+const btn = document.querySelector(".click");
 let busy = false;
 
 btn.addEventListener("click", async () => {
-  if (busy) return;   // ignore presses while a request is in flight
+  if (busy) return;
   busy = true;
+  btn.disabled = true;
   await update("POST");
+  btn.disabled = false;
   busy = false;
 });
 
-// user edits the number in the address bar
 window.addEventListener("hashchange", () => {
   const n = hashN();
   if (n !== null) render(n, false);
   else if (liveCount !== null) render(liveCount, true);
 });
 
-window.addEventListener("load", () => update("GET"));
+window.addEventListener("pageshow", (e) => {
+  if (e.persisted) update("GET");
+});
+
+update("GET");

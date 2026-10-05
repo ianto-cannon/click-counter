@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="A click counter where every click draws a new Maurer rose. Edit the number after the # in the address bar to see the rose for any count.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="hsl(12, 70%, 88%)">
   <meta property="og:title" content="Click Counter">
   <meta property="og:description" content="Every click draws a new Maurer rose.">
   <meta property="og:type" content="website">
@@ -11,7 +13,6 @@
   <meta property="og:image" content="https://counter.maricakes.de/scrnshot.jpg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta name="twitter:card" content="summary_large_image">
   <title>Click Counter</title>
   <link rel="icon" href="flower.svg" type="image/svg+xml">
   <link rel="stylesheet" href="style.css">
@@ -19,17 +20,18 @@
 <body>
   <main>
     <h1>All-time click count</h1>
-    <p id="count" aria-live="polite">&nbsp;</p>
-    <button id="click" type="button">Click</button>
-    <div id="art" role="img" aria-label="Maurer rose generated from the click count"></div>
+    <noscript><p>This counter requires JavaScript.</p></noscript>
+    <p class="count" aria-live="polite">&nbsp;</p>
+    <button class="click" type="button" aria-label="Increment the click counter">Click</button>
+    <div class="art" role="img" aria-label="Maurer rose generated from the click count"></div>
   </main>
-  <details id="about">
+  <details class="about">
     <summary>About this pattern</summary>
     <p>
-      The pattern is a <a href="https://en.wikipedia.org/wiki/Maurer_rose" target="_blank" rel="noopener">Maurer rose</a> <code>r = sin(n&theta;)</code> with <code>n = <span id="v-n"></span></code>. We draw straight lines between points on the rose curve at angles <code>&theta; = kn</code> radians, for <code>k = 1, 2, 3, ... 512</code>.
+      The pattern is a <a href="https://en.wikipedia.org/wiki/Maurer_rose" target="_blank" rel="noopener">Maurer rose</a> <code>r = sin(n&theta;)</code> with <code>n = <span class="count"></span></code>. We draw straight lines between points on the rose curve at angles <code>&theta; = kn</code> radians, for <code>k = 1, 2, 3, ... 512</code>.
     </p>
     <p>
-      In this pattern, the angle <code>&theta;</code> between each point is <code>n mod 2&pi;</code>, which is <code><span id="v-a"></span></code> of a full turn, while the phase <code>n&theta;</code> advances by <code>n&sup2; mod 2&pi;</code>, which is <code><span id="v-b"></span></code> of a turn. Since &pi; is irrational, these values never repeat for different integers <code>n</code>, and the same pattern is never drawn twice.
+      In this pattern, the angle <code>&theta;</code> between each point is <code><span class="count"></span> mod 2&pi;</code>, which is <code><span class="angle"></span></code> of a full turn, while the phase <code>n&theta;</code> advances by <code><span class="count"></span>&sup2; mod 2&pi;</code>, which is <code><span class="phase"></span></code> of a turn. Since &pi; is irrational, these values never repeat for different integers <code>n</code>, and the same pattern is never drawn twice.
     </p>
     <p>
       Change the number in the address bar to see the rose for any other count.
