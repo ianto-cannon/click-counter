@@ -35,4 +35,8 @@
   max-width: 400px; 
   width: 100%; 
   aspect-ratio: 1;
+} details span {
+  background-color: var(--logoBack);
+  border-radius: .3em;
+  font-variant-numeric: tabular-nums;
 }
