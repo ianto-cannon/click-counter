@@ -46,7 +46,7 @@ function render(n, setHash) {
 
 async function update(method) {
   try {
-    const res = await fetch("/click.php", { method });
+    const res = await fetch("/click", { method });
     if (!res.ok) {
       if (res.status === 429) {
         btn.textContent = "Slow down";
